@@ -1,0 +1,42 @@
+notes-app/
+├── package.json
+├── tailwind.config.ts
+├── postcss.config.js
+├── tsconfig.json
+├── next.config.mjs
+├── .env.example
+├── prisma/
+│   ├── schema.prisma @
+│   └── seed.ts @
+├── app/
+│   ├── globals.css
+│   ├── layout.tsx @ 
+│   ├── page.tsx @
+│   ├── dashboard/
+│   │   └── page.tsx @
+│   └── api/
+│       ├── health/
+│       │   └── route.ts @
+│       ├── auth/
+│       │   └── login/
+│       │       └── route.ts @
+│       ├── notes/
+│       │   ├── route.ts @
+│       │   └── [id]/
+│       │       └── route.ts @
+│       └── tenants/
+│           └── upgrade/
+│               └── route.ts @
+├── components/
+│   └── NoteCard.tsx @
+├── hooks/
+│   └── useAuth.ts @
+├── lib/
+│   ├── prisma.ts @
+│   └── auth.ts @
+└── middleware.ts @
+
+
+Kx9l0U2hr6bqcCSG
+
+postgresql://postgres:Kx9l0U2hr6bqcCSG@db.efizrhvgfgnjnkaokckx.supabase.co:5432/postgres
