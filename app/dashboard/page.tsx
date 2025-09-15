@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import NoteCard from '@/components/NoteCard'
-const { user, token, logout, loading } = useAuth()
 
 interface Note {
   id: string
@@ -15,7 +14,10 @@ interface Note {
 }
 
 export default function Dashboard() {
-  const { user, token, logout } = useAuth()
+  // FIX 1: Call `useAuth` only ONCE inside the component.
+  // Aliased `loading` to `authLoading` to avoid variable name conflicts.
+  const { user, token, logout, loading: authLoading } = useAuth()
+
   const [notes, setNotes] = useState<Note[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -24,25 +26,20 @@ export default function Dashboard() {
   const [error, setError] = useState('')
   const router = useRouter()
 
-  // useEffect(() => {
-    
-  //   if (!user || !token) {
-  //     router.push('/')
-  //     return
-  //   }
-  //   fetchNotes()
-  // }, [user, token, router])
-
+  // FIX 2: Updated the useEffect hook's logic and dependencies.
   useEffect(() => {
-  if (loading) {
-    return;
-  }
-  if (!user || !token) {
-    router.push('/');
-  } else {
-    fetchNotes();
-  }
-}, [user, token, loading, router]); 
+    // Wait until the authentication check is complete.
+    if (authLoading) {
+      return
+    }
+    // If not authenticated after the check, redirect to the login page.
+    if (!user || !token) {
+      router.push('/')
+    } else {
+      // If authenticated, fetch the user's notes.
+      fetchNotes()
+    }
+  }, [user, token, authLoading, router])
 
   const fetchNotes = async () => {
     try {
@@ -129,7 +126,8 @@ export default function Dashboard() {
     }
   }
 
-  if (loading) {
+  // FIX 3: Display a loading message while either auth or notes are loading.
+  if (authLoading || loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
   }
 
